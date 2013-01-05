@@ -14,6 +14,8 @@ end
 
 
 function volume:set(val)
+	cmd = string.format("amixer set %s %d%%", volume.channel, val)
+	os.execute(cmd)
 end
 
 
@@ -50,6 +52,7 @@ function textvolume.new(channel, timeout)
 
 	volume.channel = channel
 
+	w["set"]    = volume["set"]
 	w["inc"]    = volume["inc"]
 	w["dec"]    = volume["dec"]
 	w["toggle"] = volume["toggle"]
