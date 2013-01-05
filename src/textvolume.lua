@@ -77,10 +77,13 @@ function textvolume.new(channel, timeout)
 	w["update"] = function()
 		info = volume:get()
 		if info.muted == false then
-			text = string.format("vol +%d", info.volume)
+			local color = "#AFD700"
+			text = string.format("Vol <span color='%s'>%d</span>", color, info.volume)
 		else
-			text = string.format("vol -%d", info.volume)
+			local color = "#F53145"
+			text = string.format("Vol <span color='%s'>%d</span>", color, info.volume)
 		end
+
 		w:set_markup(text)
 	end
 
