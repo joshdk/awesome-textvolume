@@ -34,6 +34,8 @@ end
 
 
 function volume:toggle()
+	cmd = string.format("amixer set %s toggle", volume.channel)
+	os.execute(cmd)
 end
 
 
@@ -43,6 +45,8 @@ function textvolume.new(channel, timeout)
 	local w = textbox()
 
 	volume.channel = channel
+
+	w["toggle"] = volume["toggle"]
 
 	w["update"] = function()
 		w:set_markup("vol --")
