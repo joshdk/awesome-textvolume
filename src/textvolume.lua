@@ -6,51 +6,53 @@ local capi = { timer = timer }
 --- Text volume widget.
 -- awful.widget.textvolume
 local textvolume = { mt = {} }
+local volume = {}
+
+
+function volume:get()
+end
+
+
+function volume:set(val)
+end
+
+
+function volume:inc(val)
+end
+
+
+function volume:dec(val)
+end
+
+
+function volume:mute()
+end
+
+
+function volume:unmute()
+end
+
+
+function volume:toggle()
+end
+
 
 function textvolume.new(channel, timeout)
 	local channel = channel or "Master"
 	local timeout = timeout or 5
-
 	local w = textbox()
-	textvolume.widget = w
+
+	volume.channel = channel
+
+	w["update"] = function()
+		w:set_markup("vol --")
+	end
+
 	local timer = capi.timer { timeout = timeout }
-	timer:connect_signal("timeout", function() textvolume:update() end)
+	timer:connect_signal("timeout", function() w:update() end)
 	timer:start()
 	timer:emit_signal("timeout")
 	return w
-end
-
-
-function textvolume:get()
-end
-
-
-function textvolume:set(val)
-end
-
-
-function textvolume:inc(val)
-end
-
-
-function textvolume:dec(val)
-end
-
-
-function textvolume:mute()
-end
-
-
-function textvolume:unmute()
-end
-
-
-function textvolume:toggle()
-end
-
-
-function textvolume:update()
-	self.widget:set_markup("vol --")
 end
 
 
