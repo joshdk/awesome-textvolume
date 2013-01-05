@@ -69,12 +69,12 @@ function textvolume.new(channel, timeout)
 	volume.channel = channel
 
 	w["get"]    = volume["get"]
-	w["set"]    = volume["set"]
-	w["inc"]    = volume["inc"]
-	w["dec"]    = volume["dec"]
-	w["mute"]   = volume["mute"]
-	w["unmute"] = volume["unmute"]
-	w["toggle"] = volume["toggle"]
+	w["set"]    = function(self, val) volume:set(val) w:update() end
+	w["inc"]    = function(self, val) volume:inc(val) w:update() end
+	w["dec"]    = function(self, val) volume:dec(val) w:update() end
+	w["mute"]   = function(self)      volume:mute()   w:update() end
+	w["unmute"] = function(self)      volume:unmute() w:update() end
+	w["toggle"] = function(self)      volume:toggle() w:update() end
 
 	w["update"] = function()
 		local info = volume:get()
