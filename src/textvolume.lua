@@ -10,6 +10,16 @@ local volume = {}
 
 
 function volume:get()
+	cmd = string.format("amixer get %s", volume.channel)
+
+	local fd = io.popen(cmd)
+	local status = fd:read("*all")
+	fd:close()
+
+	info={}
+	info.volume = string.match(status, "(%d?%d?%d)%%") or "0"
+	info.muted=string.find(status, "[off]", 1, true) ~= nil
+	return info
 end
 
 
@@ -56,6 +66,7 @@ function textvolume.new(channel, timeout)
 
 	volume.channel = channel
 
+	w["get"]    = volume["get"]
 	w["set"]    = volume["set"]
 	w["inc"]    = volume["inc"]
 	w["dec"]    = volume["dec"]
