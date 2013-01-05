@@ -10,13 +10,13 @@ local volume = {}
 
 
 function volume:get()
-	cmd = string.format("amixer get %s", volume.channel)
+	local cmd = string.format("amixer get %s", volume.channel)
 
 	local fd = io.popen(cmd)
 	local status = fd:read("*all")
 	fd:close()
 
-	info={}
+	local info={}
 	info.volume = string.match(status, "(%d?%d?%d)%%") or "0"
 	info.muted=string.find(status, "[off]", 1, true) ~= nil
 	return info
@@ -24,37 +24,37 @@ end
 
 
 function volume:set(val)
-	cmd = string.format("amixer set %s %d%%", volume.channel, val)
+	local cmd = string.format("amixer set %s %d%%", volume.channel, val)
 	os.execute(cmd)
 end
 
 
 function volume:inc(val)
-	cmd = string.format("amixer set %s %d%%+", volume.channel, val)
+	local cmd = string.format("amixer set %s %d%%+", volume.channel, val)
 	os.execute(cmd)
 end
 
 
 function volume:dec(val)
-	cmd = string.format("amixer set %s %d%%-", volume.channel, val)
+	local cmd = string.format("amixer set %s %d%%-", volume.channel, val)
 	os.execute(cmd)
 end
 
 
 function volume:mute()
-	cmd = string.format("amixer set %s mute", volume.channel)
+	local cmd = string.format("amixer set %s mute", volume.channel)
 	os.execute(cmd)
 end
 
 
 function volume:unmute()
-	cmd = string.format("amixer set %s unmute", volume.channel)
+	local cmd = string.format("amixer set %s unmute", volume.channel)
 	os.execute(cmd)
 end
 
 
 function volume:toggle()
-	cmd = string.format("amixer set %s toggle", volume.channel)
+	local cmd = string.format("amixer set %s toggle", volume.channel)
 	os.execute(cmd)
 end
 
@@ -75,7 +75,8 @@ function textvolume.new(channel, timeout)
 	w["toggle"] = volume["toggle"]
 
 	w["update"] = function()
-		info = volume:get()
+		local info = volume:get()
+		local text
 		if info.muted == false then
 			local color = "#AFD700"
 			text = string.format("Vol <span color='%s'>%d</span>", color, info.volume)
