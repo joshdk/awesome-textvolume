@@ -1,10 +1,8 @@
--- require("awful")
-local button = require("awful.button")
-local util = require("awful.util")
-
 local setmetatable = setmetatable
 local os = os
 local textbox = require("wibox.widget.textbox")
+local button = require("awful.button")
+local util = require("awful.util")
 local capi = { timer = timer }
 
 --- Text volume widget.
