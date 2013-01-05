@@ -75,7 +75,13 @@ function textvolume.new(channel, timeout)
 	w["toggle"] = volume["toggle"]
 
 	w["update"] = function()
-		w:set_markup("vol --")
+		info = volume:get()
+		if info.muted == false then
+			text = string.format("vol +%d", info.volume)
+		else
+			text = string.format("vol -%d", info.volume)
+		end
+		w:set_markup(text)
 	end
 
 	local timer = capi.timer { timeout = timeout }
