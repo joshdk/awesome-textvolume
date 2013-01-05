@@ -32,10 +32,14 @@ end
 
 
 function volume:mute()
+	cmd = string.format("amixer set %s mute", volume.channel)
+	os.execute(cmd)
 end
 
 
 function volume:unmute()
+	cmd = string.format("amixer set %s unmute", volume.channel)
+	os.execute(cmd)
 end
 
 
@@ -55,6 +59,8 @@ function textvolume.new(channel, timeout)
 	w["set"]    = volume["set"]
 	w["inc"]    = volume["inc"]
 	w["dec"]    = volume["dec"]
+	w["mute"]   = volume["mute"]
+	w["unmute"] = volume["unmute"]
 	w["toggle"] = volume["toggle"]
 
 	w["update"] = function()
