@@ -1,3 +1,7 @@
+-- require("awful")
+local button = require("awful.button")
+local util = require("awful.util")
+
 local setmetatable = setmetatable
 local os = os
 local textbox = require("wibox.widget.textbox")
@@ -87,6 +91,21 @@ function textvolume.new(channel, timeout)
 
 		w:set_markup(text)
 	end
+
+	w:buttons(util.table.join(
+		button({ }, 1, function()
+			w:inc(5)
+			w:update()
+		end),
+		button({ }, 3, function()
+			w:dec(5)
+			w:update()
+		end),
+		button({ }, 2, function()
+			w:toggle()
+			w:update()
+		end)
+	))
 
 	local timer = capi.timer { timeout = timeout }
 	timer:connect_signal("timeout", function() w:update() end)
