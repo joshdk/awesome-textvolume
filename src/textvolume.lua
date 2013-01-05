@@ -12,8 +12,9 @@ function textvolume.new(channel, timeout)
 	local timeout = timeout or 5
 
 	local w = textbox()
+	textvolume.widget = w
 	local timer = capi.timer { timeout = timeout }
-	timer:connect_signal("timeout", function() w:set_markup("vol --") end)
+	timer:connect_signal("timeout", function() textvolume:update() end)
 	timer:start()
 	timer:emit_signal("timeout")
 	return w
@@ -49,6 +50,7 @@ end
 
 
 function textvolume:update()
+	self.widget:set_markup("vol --")
 end
 
 
