@@ -1,11 +1,11 @@
-SOURCE="./src/textvolume.lua"
-TARGET="/usr/share/awesome/lib/awful/widget/textvolume.lua"
+SOURCE="./src/textvolume"
+TARGET="$(HOME)/.config/awesome/textvolume"
 
 
 all: install
 
 install:
-	install -m 644 $(SOURCE) $(TARGET)
+	cp -r $(SOURCE) $(TARGET)
 
 uninstall:
-	rm $(TARGET)
+	rm -rf $(TARGET)

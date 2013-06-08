@@ -9,32 +9,30 @@ Installing
 
     # make install
 
-```lua
--- add this line inside of /usr/share/awesome/lib/awful/widget/init.lua
-textvolume = require("awful.widget.textvolume");
-```
-
 
 Uninstalling
 ------------
 
     # make uninstall
 
-```lua
--- remove this line from /usr/share/awesome/lib/awful/widget/init.lua
-textvolume = require("awful.widget.textvolume");
-```
 
 Using
 -----
 
+Import the module
+
+```lua
+-- Add this line at the top of your rc.lua
+local textvolume = require("textvolume");
+```
+
 Create a widget instance (at the start of the Wibox section in rc.lua):
 
 ```lua
--- Create a textclock widget
-mytextclock = awful.widget.textclock()
--- Create a textvolume widget
-mytextvolume = awful.widget.textvolume()
+-- Create the textclock widget
+local mytextclock = awful.widget.textclock()
+-- Create our textvolume widget
+local mytextvolume = awful.widget.textvolume()
 ```
 
 Add our instance (near the end of the Wibox section in rc.lua):
