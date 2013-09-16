@@ -3,62 +3,12 @@ local os = os
 local textbox = require("wibox.widget.textbox")
 local button = require("awful.button")
 local util = require("awful.util")
+local alsa = require("alsa")
 local capi = { timer = timer }
 
---- Text volume widget.
--- awful.widget.textvolume
+
 local textvolume = { mt = {} }
 local volume = {}
-
-
-function volume:get()
-	local cmd = string.format("amixer get %s", volume.channel)
-
-	local fd = io.popen(cmd)
-	local status = fd:read("*all")
-	fd:close()
-
-	local info={}
-	info.volume = string.match(status, "(%d?%d?%d)%%") or "0"
-	info.muted=string.find(status, "[off]", 1, true) ~= nil
-	return info
-end
-
-
-function volume:set(val)
-	local cmd = string.format("amixer set %s %d%%", volume.channel, val)
-	os.execute(cmd)
-end
-
-
-function volume:inc(val)
-	local cmd = string.format("amixer set %s %d%%+", volume.channel, val)
-	os.execute(cmd)
-end
-
-
-function volume:dec(val)
-	local cmd = string.format("amixer set %s %d%%-", volume.channel, val)
-	os.execute(cmd)
-end
-
-
-function volume:mute()
-	local cmd = string.format("amixer set %s mute", volume.channel)
-	os.execute(cmd)
-end
-
-
-function volume:unmute()
-	local cmd = string.format("amixer set %s unmute", volume.channel)
-	os.execute(cmd)
-end
-
-
-function volume:toggle()
-	local cmd = string.format("amixer set %s toggle", volume.channel)
-	os.execute(cmd)
-end
 
 
 function textvolume.new(channel, timeout)
@@ -66,42 +16,67 @@ function textvolume.new(channel, timeout)
 	local timeout = timeout or 5
 	local w = textbox()
 
-	volume.channel = channel
+	w.channel = channel
 
-	w["get"]    = volume["get"]
-	w["set"]    = function(self, val) volume:set(val) w:update() end
-	w["inc"]    = function(self, val) volume:inc(val) w:update() end
-	w["dec"]    = function(self, val) volume:dec(val) w:update() end
-	w["mute"]   = function(self)      volume:mute()   w:update() end
-	w["unmute"] = function(self)      volume:unmute() w:update() end
-	w["toggle"] = function(self)      volume:toggle() w:update() end
+	function w:set(val)
+		self:update(
+			alsa.set(self.channel, val)
+		)
+	end
 
-	w["update"] = function()
-		local info = volume:get()
+	function w:inc(val)
+		self:update(
+			alsa.inc(self.channel, val)
+		)
+	end
+
+	function w:dec(val)
+		self:update(
+			alsa.dec(self.channel, val)
+		)
+	end
+
+	function w:mute(val)
+		self:update(
+			alsa.mute(self.channel)
+		)
+	end
+
+	function w:unmute(val)
+		self:update(
+			alsa.unmute(self.channel)
+		)
+	end
+
+	function w:toggle(val)
+		self:update(
+			alsa.toggle(self.channel)
+		)
+	end
+
+	function w:update(status)
+		status = status or alsa.get(self.channel)
 		local text
-		if info.muted == false then
+		if status.muted == false then
 			local color = "#AFD700"
-			text = string.format("Vol <span color='%s'>%d</span>", color, info.volume)
+			text = string.format("Vol <span color='%s'>%d</span>", color, status.volume)
 		else
 			local color = "#F53145"
-			text = string.format("Vol <span color='%s'>%d</span>", color, info.volume)
+			text = string.format("Vol <span color='%s'>%d</span>", color, status.volume)
 		end
 
-		w:set_markup(text)
+		self:set_markup(text)
 	end
 
 	w:buttons(util.table.join(
 		button({ }, 1, function()
 			w:inc(5)
-			w:update()
 		end),
 		button({ }, 3, function()
 			w:dec(5)
-			w:update()
 		end),
 		button({ }, 2, function()
 			w:toggle()
-			w:update()
 		end)
 	))
 
@@ -116,5 +91,6 @@ end
 function textvolume.mt:__call(...)
 	return textvolume.new(...)
 end
+
 
 return setmetatable(textvolume, textvolume.mt)
