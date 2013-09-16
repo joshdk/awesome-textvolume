@@ -1,11 +1,12 @@
-SOURCE="./src/textvolume"
-TARGET="$(HOME)/.config/awesome/textvolume"
+SOURCE=./src/textvolume
+TARGET=$(HOME)/.config/awesome/textvolume
 
 
 all: install
 
 install:
-	cp -r $(SOURCE) $(TARGET)
+	mkdir -p $(TARGET)
+	cp -r $(SOURCE)/init.lua $(TARGET)/init.lua
 
 uninstall:
 	rm -rf $(TARGET)
