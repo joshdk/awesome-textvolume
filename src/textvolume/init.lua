@@ -59,10 +59,10 @@ function textvolume.new(channel, timeout)
 		local text
 		if status.muted == false then
 			local color = "#AFD700"
-			text = string.format("Vol <span color='%s'>%d</span>", color, status.volume)
+			text = string.format("Vol <span color='%s'>%d</span>", color, status.volume[1] or 0)
 		else
 			local color = "#F53145"
-			text = string.format("Vol <span color='%s'>%d</span>", color, status.volume)
+			text = string.format("Vol <span color='%s'>%d</span>", color, status.volume[1] or 0)
 		end
 
 		self:set_markup(text)
